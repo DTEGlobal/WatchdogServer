@@ -51,8 +51,8 @@ def FeedWatchdog():
 #-------------------------------------------------------------------------------
 def Killer():
 # 1. Get configuration parameters from main (# of threads and timeout)
-    numberOfClients = 3
-    timeout = 30
+    numberOfClients = 4
+    timeout = 60
 
     # 2. Start Hardware Watchdog (platform dependant?)
     StartWatchdog()
@@ -67,7 +67,6 @@ def Killer():
                 if currentTime - float(Server.clientThreads[id]) > timeout:
                     kill = True
                     break
-                print("Time{} - TimeClient{}".format(currentTime,float(Server.clientThreads[id])))
         else:
             kill = True
         # 5. If all of the above was OK, feed Watchdog.

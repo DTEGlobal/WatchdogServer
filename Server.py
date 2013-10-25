@@ -32,7 +32,7 @@ def Server():
     s.bind(('', 8080))
     s.listen(16)
 
-    print("Server started")
+    print("Watchdog Server started")
 
     while True:
 
@@ -47,4 +47,7 @@ def Server():
         UUID, time = data.split(',')
         # If UUID already exists, update the time if not it creates a new entry
         clientThreads[UUID] = time
+
+
+
 
