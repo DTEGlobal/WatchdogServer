@@ -14,6 +14,7 @@ __author__ = 'Cesar'
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 from socket import *
+import logging
 
 global clientThreads
 clientThreads = dict()
@@ -32,7 +33,7 @@ def Server():
     s.bind(('', 8080))
     s.listen(16)
 
-    print("Watchdog Server started")
+    logging.info("Watchdog Server started")
 
     while True:
 
@@ -45,6 +46,7 @@ def Server():
     # 2. Update dictionary. Check if the UUID of the client is already on.
 
         UUID, time = data.split(',')
+        logging.debug("Watchdog Server - Client [%s] Time [%s]", UUID, time)
         # If UUID already exists, update the time if not it creates a new entry
         clientThreads[UUID] = time
 

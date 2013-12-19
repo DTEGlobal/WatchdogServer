@@ -14,8 +14,13 @@ __author__ = 'Cesar'
 #-------------------------------------------------------------------------------
 
 import threading
+import logging
+
 from Killer import Killer
 from Server import Server
+
+logging.basicConfig(format='%(asctime)s - [%(levelname)s]: %(message)s', filename='api.log', level=logging.INFO)
+logging.info('API Client - Started')
 
 ServerThread = threading.Thread(target=Server)
 ServerThread.daemon = True
@@ -27,4 +32,4 @@ KillerThread.start()
 
 
 while True:
-    a=0 #Do nothing
+    a = 0  # Do nothing

@@ -14,6 +14,22 @@ __author__ = 'Cesar'
 import Server
 import time
 import os
+import logging
+
+
+#-------------------------------------------------------------------------------
+# Method:   StartWatchdog
+# Purpose:  Disable Watchdog timer. Platform dependant. 'V' is a magic character
+#           that will disable the watchdog
+# Author:   CCR, JC
+#
+# Created:  10/02/2013
+#-------------------------------------------------------------------------------
+def DisableWatchdog():
+    # Specific for Raspberry PI
+    os.system('echo V > /dev/watchdog')
+
+    logging.info("Watchdog disabled")
 
 
 #-------------------------------------------------------------------------------
@@ -26,9 +42,10 @@ import os
 def StartWatchdog():
     # Specific for Raspberry PI
     os.system("sudo chmod 777 /dev/watchdog")
-    os.system('echo "bone" > /dev/watchdog')
+    os.system('echo bone > /dev/watchdog')
 
-    print("Watchdog started")
+    logging.info("Watchdog started")
+
 
 #-------------------------------------------------------------------------------
 # Method:   FeedWatchdog
@@ -38,8 +55,9 @@ def StartWatchdog():
 # Created:  10/02/2013
 #-------------------------------------------------------------------------------
 def FeedWatchdog():
-    os.system('echo "bone" > /dev/watchdog')
-    print(" =) Nooom - Nooom")
+    os.system('echo bone > /dev/watchdog')
+    logging.debug(" =) Nooom - Nooom")
+
 
 #-------------------------------------------------------------------------------
 # Method:   Killer
@@ -51,8 +69,9 @@ def FeedWatchdog():
 #-------------------------------------------------------------------------------
 def Killer():
 # 1. Get configuration parameters from main (# of threads and timeout)
-    numberOfClients = 4
-    timeout = 60
+    numberOfClients = 2
+    timeout = 180
+    notEnoughClientsTimeout = 0
 
     # 2. Start Hardware Watchdog (platform dependant?)
     StartWatchdog()
@@ -68,10 +87,16 @@ def Killer():
                     kill = True
                     break
         else:
-            kill = True
+            if notEnoughClientsTimeout >= timeout:
+                kill = True
+                notEnoughClientsTimeout = 0
+            else:
+                kill = False
+                notEnoughClientsTimeout += notEnoughClientsTimeout
+
         # 5. If all of the above was OK, feed Watchdog.
         if kill == False:
             FeedWatchdog()
         else:
-            print(" =( ")
+            logging.info("Watchdog Killer ->  =( ")
 
