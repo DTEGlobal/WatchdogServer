@@ -80,6 +80,8 @@ def Killer():
         kill = False
         # 3. Compare table size (table set by server) with # of threads
         if len(Server.clientThreads) == numberOfClients:
+            # Number of clients reached
+            notEnoughClientsTimeout = 0
             # 4. Compare each thread time entry with system time and timeout
             for id in Server.clientThreads.keys():
                 currentTime = time.time()
@@ -89,7 +91,6 @@ def Killer():
         else:
             if notEnoughClientsTimeout >= timeout:
                 kill = True
-                notEnoughClientsTimeout = 0
             else:
                 kill = False
                 notEnoughClientsTimeout += notEnoughClientsTimeout

@@ -12,15 +12,16 @@ __author__ = 'Cesar'
 # Copyright:   (c) Cesar 2013
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
-
 import threading
 import logging
 
 from Killer import Killer
 from Server import Server
 
-logging.basicConfig(format='%(asctime)s - [%(levelname)s]: %(message)s', filename='api.log', level=logging.INFO)
-logging.info('API Client - Started')
+logging.basicConfig(format='%(asctime)s - [%(levelname)s]: %(message)s',
+                    filename='/home/pi/logs/watchdogServer.log',
+                    level=logging.INFO)
+logging.info('Watchdog main - Started')
 
 ServerThread = threading.Thread(target=Server)
 ServerThread.daemon = True
